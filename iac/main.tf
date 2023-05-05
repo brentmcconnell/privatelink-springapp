@@ -391,7 +391,7 @@ resource "azurerm_linux_web_app" "backwebapp" {
 
 # Create a dev slot in the AppService
 resource "azurerm_linux_web_app_slot" "devslot" {
-  name           = "${local.prefix}-devslot"
+  name           = "devslot"
   app_service_id = azurerm_linux_web_app.backwebapp.id
   site_config {
     minimum_tls_version = "1.2"
