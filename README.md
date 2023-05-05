@@ -145,5 +145,19 @@ and password to RDP into the VM is 'vmadmin/Password123$'.
 
 ### Setup Project Build Pipeline
 
-Select the Pipeline icon from the left navigation in Azure DevOps and then
-select __New Pipeline__. 
+Select Pipelines from the left navigation menu and then select "New
+Pipeline".  Choose the __privatelink-springapp__ repository from your repository list where you forked
+it. 
+
+At the __Configuration Your Pipeline__ page, select __Existing Azure Pipeline
+YAML file__ and then select __/build_project.yml__ for the Path.
+
+Next we'll need another Service Connection to the Azure Container Registry
+created by the Terraform pipeline above.  This will give the new pipeline access
+to Push new images to the ACR.
+
+Select "Create service connection" -> "Docker Registry".  Select __Azure
+Container Registry__  option and enter the Subscription information, ACR name
+and your Azure AD credentials when prompted.  Make sure to name the service
+connection __acr__ so that the build pipeline doesn't fail. 
+

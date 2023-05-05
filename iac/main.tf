@@ -385,6 +385,8 @@ resource "azurerm_linux_web_app" "backwebapp" {
   identity {
     type                = "SystemAssigned"
   }
+  
+  depends_on = [azurerm_redis_cache.redis, azurerm_mysql_flexible_server.dbserver]
 }
 
 # Create a dev slot in the AppService
