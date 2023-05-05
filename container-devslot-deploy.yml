@@ -27,6 +27,6 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'azure'
-    scriptType: 'batch'
+    scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'az webapp config container set --name privappebm-webapp --resource-group PRIVATE-RG --docker-custom-image-name privappebmacr.azurecr.io/todoapp:$(resources.container.MyContainer.tag) --docker-registry-server-url https://privappebmacr.azurecr.io'
