@@ -80,8 +80,13 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = true
   provisioner "local-exec" {
     when        = create
-    command     = "az acr import --force --name ${azurerm_container_registry.acr.name}  --source docker.io/emcconne/todoapp:latest --image todoapp:latest"
     on_failure  = continue
+    command = <<EOF
+      az login --service-principal -u ${local.sp_id} -p ${local.sp_key} 
+      az acr import --force --name ${azurerm_container_registry.acr.name}  --source docker.io/emcconne/todoapp:latest --image todoapp:latest
+    EOF
+    interpreter = ["/bin/bash", "-c"]
+  provisioner "local-exec" {
   }
 }
 

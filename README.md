@@ -117,4 +117,26 @@ the top right corner of the editor to add four variables for the pipeline:
 Once these Variables have been added you can save and execute the pipeline.
 This will take about 20 minutes to execute and will create resources in Azure.
 
+After the Terraform script has completed the following primary resources can be found in
+the Resource Group specified.  There are other supporting objects as well but
+these are the primary objects:
+* Redis Cache
+* MySQL Database
+* AppService Plan
+* AppService WebApp
+* AppService WebApp Slot
+* Azure Container Registry
+* PrivateLink for AppService
+* Windows 11 VM
 
+At this point you should be able to view the default web address of the Spring
+Application by running the following command to see the web address.  Remember
+to change the resource_group name below before executing.
+```
+az webapp list -g <resource-group> --query "[0].defaultHostName" -o tsv 2>/dev/null
+```
+If you visit that hostname from a web browser outside of Azure you should see a
+"403 Forbidden" message indicating that the web application is not accessible
+from outside.  However, if you RDP into the Win 11 VM that was provisioned in
+the VNet and use a web browser to view the same hostname you will see the web
+application for the Spring App, a ToDo list application, appear.
