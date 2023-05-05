@@ -45,6 +45,7 @@ locals {
   prefix                  = var.prefix 
   sp_id                   = var.sp_id
   sp_key                  = var.sp_key
+  tenant_id               = data.azurerm_client_config.current.tenant_id
 }
 
 # This pulls in data from the current user and subscription
@@ -82,7 +83,7 @@ resource "azurerm_container_registry" "acr" {
     when        = create
     on_failure  = continue
     command = <<EOF
-      az login --service-principal -u ${local.sp_id} -p ${local.sp_key} 
+      az login --service-principal -u ${local.sp_id} -p ${local.sp_key} --tenant ${local.tenant_id}
       az acr import --force --name ${azurerm_container_registry.acr.name}  --source docker.io/emcconne/todoapp:latest --image todoapp:latest
     EOF
     interpreter = ["/bin/bash", "-c"]
