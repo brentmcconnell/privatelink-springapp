@@ -15,6 +15,18 @@ steps:
   displayName: Fail build if sp_key variable is not set
   condition: eq(variables['sp_key'], '')
 
+- bash: exit 1
+  displayName: Fail build if resource_group variable is not set
+  condition: eq(variables['resource_group'], '')
+
+- bash: exit 1
+  displayName: Fail build if prefix variable is not set
+  condition: eq(variables['prefix'], '')
+
+- bash: exit 1
+  displayName: Fail build if storage_acct variable is not set
+  condition: eq(variables['storage_acct'], '')
+
 - task: TerraformInstaller@1
   inputs:
     terraformVersion: 'latest'
