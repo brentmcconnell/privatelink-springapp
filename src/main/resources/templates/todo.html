@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<div th:replace="fragments/header :: header"/>
+	</head>
+	<body>
+		<div th:replace="fragments/navigation :: navbar">Navbar</div>	
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3 ">
+					<div class="panel panel-primary">
+						<div class="panel-heading">Add TODO</div>
+						<div class="panel-body">
+							<form action="#" th:action="@{/add-todo}" th:object="${todo}" method="post">
+								<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+									<p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>    
+								</div>	
+								<form:hidden path="id" />
+								<fieldset class="form-group">
+									<label path="description">Description</label>
+									<input type="text" th:field="*{description}" class="form-control input-lg"/>
+								</fieldset>
+
+								<fieldset class="form-group">
+									<label path="targetDate">Target Date</label>
+									<input type="text" th:field="*{targetDate}" class="form-control input-lg"/>
+								</fieldset>
+								<button type="submit" class="btn btn-success">Save</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:replace="fragments/footer :: footer"/>
+	</body>
+</html>

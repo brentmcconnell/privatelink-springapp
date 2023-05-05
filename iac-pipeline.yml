@@ -1,0 +1,56 @@
+trigger:
+  paths:
+    include:
+    - iac
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- name: resource_group
+  value: 'PRIVATELINKAPP-RG'
+- name: prefix
+  value: 'todoappebm'
+
+steps:
+- bash: exit 1
+  displayName: Fail build if sp_id variable is not set
+  condition: eq(variables['sp_id'], '')
+
+- bash: exit 1
+  displayName: Fail build if sp_key variable is not set
+  condition: eq(variables['sp_key'], '')
+
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTaskV4@4
+  displayName: Terraform Init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: iac
+    backendServiceArm: 'azure'
+    backendAzureRmResourceGroupName: $(resource_group)
+    backendAzureRmStorageAccountName: 'tfstate26467sa'
+    backendAzureRmContainerName: 'tfstate'
+    backendAzureRmKey: 'terraform.tfstate'
+
+- task: TerraformTaskV4@4
+  displayName:  Terraform Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: iac
+    environmentServiceNameAzureRM: 'azure'
+    commandOptions: '-var resource_group=$(resource_group) -var prefix=$(prefix) -var sp_id=$(sp_id) -var sp_key=$(sp_key)' 
+
+- task: TerraformTaskV4@4
+  displayName:  Terraform Apply
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: iac
+    environmentServiceNameAzureRM: 'azure'
+    commandOptions: '-var resource_group=$(resource_group) -var prefix=$(prefix) -var sp_id=$(sp_id) -var sp_key=$(sp_key)' 

@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - src/*
+
+steps:
+- task: Docker@2
+  displayName: Build and Push an image
+  inputs:
+    command: buildAndPush
+    repository: todoapp
+    Dockerfile: src/Dockerfile
+    containerRegistry: privatelinkacr 
+    tags: |
+      v$(Build.BuildId)
+      latest

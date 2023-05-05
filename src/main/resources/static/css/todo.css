@@ -1,0 +1,30 @@
+body { 
+    background: #efefef;
+}
+
+.form-signin {
+    width: 30%;
+    min-width: 300px;
+    margin: auto;
+}
+
+.login-control {
+    padding: 5px;
+    margin: 5px
+}
+
+.form-heading {
+    text-align: center;
+}
+
+.vertical-center {
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.demo-info {
+    text-align:right;
+    margin-top: 10px;
+}
