@@ -1,0 +1,32 @@
+# Explicitly set none for repositry trigger
+trigger:
+- none
+
+resources:
+  containers:
+  - container: MyContainer
+    type: ACR  
+    azureSubscription: azure
+    resourceGroup: PRIVATE-RG
+    registry: privappebmacr
+    repository: todoapp 
+    trigger:
+      enabled: 'true'
+      tags:
+        exclude: [latest]
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- bash: |
+    echo "The registry is: $(resources.container.myContainer.registry)"
+    echo "The repository is: $(resources.container.myContainer.repository)"
+    echo "The tag is:  $(resources.container.myContainer.tag)"
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure'
+    scriptType: 'batch'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az webapp config container set --name privappebm-webapp --resource-group PRIVATE-RG --docker-custom-image-name privappebmacr.azurecr.io/todoapp:$(resources.container.MyContainer.tag) --docker-registry-server-url https://privappebmacr.azurecr.io'
