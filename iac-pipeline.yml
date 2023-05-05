@@ -6,12 +6,6 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-- name: resource_group
-  value: 'PRIVATELINKAPP-RG'
-- name: prefix
-  value: 'todoappebm'
-
 steps:
 - bash: exit 1
   displayName: Fail build if sp_id variable is not set
@@ -33,7 +27,7 @@ steps:
     workingDirectory: iac
     backendServiceArm: 'azure'
     backendAzureRmResourceGroupName: $(resource_group)
-    backendAzureRmStorageAccountName: 'tfstate26467sa'
+    backendAzureRmStorageAccountName: $(storage_acct) 
     backendAzureRmContainerName: 'tfstate'
     backendAzureRmKey: 'terraform.tfstate'
 
