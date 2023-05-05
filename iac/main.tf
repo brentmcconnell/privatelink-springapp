@@ -510,7 +510,7 @@ output "vault_uri" {
 }
 
 output "sp_id" {
-  value = var.sp_id 
+  value = nonsensitive(var.sp_id)
 }
 
 output "sp_tenantid" {
@@ -518,7 +518,7 @@ output "sp_tenantid" {
 }
 
 output "sp_subscriptionid" {
-  value = data.azurerm_subscription.current.subscription_id
+  value = nonsensitive(data.azurerm_subscription.current.subscription_id)
 }
 
 
