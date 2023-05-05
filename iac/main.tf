@@ -85,7 +85,7 @@ resource "azurerm_container_registry" "acr" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOF
       az login --service-principal -u ${local.sp_id} -p ${local.sp_key} --tenant ${local.tenant_id}
-      az acr import --force --name ${azurerm_container_registry.acr.name}  --source docker.io/emcconne/todoapp:latest --image todoapp:latest
+      az acr import --force --name ${azurerm_container_registry.acr.name}  --source docker.io/emcconne/springdemo:latest --image todoapp:latest
     EOF
   }
 }

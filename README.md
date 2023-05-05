@@ -96,6 +96,7 @@ the name you gave the service connection if other than __azure__ as that will be
 
 ## Setup ADO Pipelines
 
+### Setup Terraform Pipeline
 Select Pipelines from the left navigation menu and then select "Create
 Pipeline".  Choose the __privatelink-springapp__ repository from your repository list where you forked
 it. 
@@ -139,4 +140,10 @@ If you visit that hostname from a web browser outside of Azure you should see a
 "403 Forbidden" message indicating that the web application is not accessible
 from outside.  However, if you RDP into the Win 11 VM that was provisioned in
 the VNet and use a web browser to view the same hostname you will see the web
-application for the Spring App, a ToDo list application, appear.
+application for the Spring App, a ToDo list application, appear.  The username
+and password to RDP into the VM is 'vmadmin/Password123$'.
+
+### Setup Project Build Pipeline
+
+Select the Pipeline icon from the left navigation in Azure DevOps and then
+select __New Pipeline__. 
