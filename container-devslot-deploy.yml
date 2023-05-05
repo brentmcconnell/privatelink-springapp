@@ -25,6 +25,7 @@ steps:
     echo "The tag is:  $(resources.container.myContainer.tag)"
 
 - task: AzureCLI@2
+  displayName: Deploy to devslot
   inputs:
     azureSubscription: 'azure'
     scriptType: 'bash'
