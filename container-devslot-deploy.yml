@@ -7,8 +7,8 @@ resources:
   - container: MyContainer
     type: ACR  
     azureSubscription: azure
-    resourceGroup: $(resource_group)
-    registry: $(prefix)acr
+    resourceGroup: PRIVATE-RG
+    registry: privappebmacr
     repository: todoapp 
     trigger:
       enabled: 'true'
