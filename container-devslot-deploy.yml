@@ -29,4 +29,4 @@ steps:
     azureSubscription: 'azure'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az webapp config container set --slot devslot --name privappebm-webapp --resource-group PRIVATE-RG --docker-custom-image-name privappebmacr.azurecr.io/todoapp:$(resources.container.MyContainer.tag) --docker-registry-server-url https://privappebmacr.azurecr.io'
+    inlineScript: 'az webapp config container set --slot devslot --name $(prefix)-webapp --resource-group $(resource_group) --docker-custom-image-name $(prefix)acr.azurecr.io/todoapp:$(resources.container.MyContainer.tag) --docker-registry-server-url https://$(prefix).azurecr.io'
