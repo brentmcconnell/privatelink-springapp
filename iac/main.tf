@@ -510,7 +510,7 @@ output "vault_uri" {
 }
 
 output "sp_id" {
-  value = data.azuread_service_principal.sp.application_id
+  value = var.sp_id 
 }
 
 output "sp_tenantid" {

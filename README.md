@@ -103,6 +103,18 @@ it.
 At the __Configuration Your Pipeline__ page, select __Existing Azure Pipeline
 YAML file__ and then select __/iac_pipeline.yml__ for the Path.
 
+Once the pipline has been loaded into the editor use the __Variables__ option in
+the top right corner of the editor to add four variables for the pipeline:
+* resource_group = name of resource group created during initial script
+  execution
+* prefix = prefix is the __unique__ set of characters to be used by Terraform to
+  create resources in Azure.  Terraform will fail if this is not unique.
+* storage_acct = __STORAGE_ACCT_NAME__ from initial script execution.
+* sp_id = __appId__ from initial script execution (select __secret__ when creating)
+* sp_key = __password__ from initial script execution (select __secret__ when
+  creating)
 
+Once these Variables have been added you can save and execute the pipeline.
+This will take about 20 minutes to execute and will create resources in Azure.
 
 
