@@ -430,9 +430,9 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink" {
   virtual_network_id = azurerm_virtual_network.vnet.id
 }
 
-# Setup privateendpoint for AppService
-resource "azurerm_private_endpoint" "privateendpoint" {
-  name                = "${local.prefix}-privateendpoint"
+# Setup privateendpoint for Redis
+resource "azurerm_private_endpoint" "privateendpoint-redis" {
+  name                = "${local.prefix}-privateendpoint-redis"
   location            = local.location 
   resource_group_name = local.resource_group 
   subnet_id           = azurerm_subnet.endpointsubnet.id
@@ -443,7 +443,27 @@ resource "azurerm_private_endpoint" "privateendpoint" {
   }
 
   private_service_connection {
-    name = "privateendpointconnection"
+    name = "privateendpointconnection-redis"
+    private_connection_resource_id = azurerm_redis_cache.redis.id
+    subresource_names = ["redis"]
+    is_manual_connection = false
+  }
+}
+
+# Setup privateendpoint for AppService
+resource "azurerm_private_endpoint" "privateendpoint-app" {
+  name                = "${local.prefix}-privateendpoint-app"
+  location            = local.location 
+  resource_group_name = local.resource_group 
+  subnet_id           = azurerm_subnet.endpointsubnet.id
+
+  private_dns_zone_group {
+    name = "privatednszonegroup"
+    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone.id]
+  }
+
+  private_service_connection {
+    name = "privateendpointconnection-app"
     private_connection_resource_id = azurerm_linux_web_app.backwebapp.id
     subresource_names = ["sites"]
     is_manual_connection = false
