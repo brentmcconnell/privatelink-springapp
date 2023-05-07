@@ -86,7 +86,7 @@ script output from above (script output is in bold):
 * Subscription Id = __SUBSCRIPTION_ID__
 * Service Principal Id = __appId__
 * Service Principal Key = __password__
-* Subscription Name = <any string>
+* Subscription Name = <any-string>
 * Service connection name = __azure__ (can be anything but "__azure__" is used
   in this repo throughout)
 
@@ -156,8 +156,9 @@ Next we'll need another Service Connection to the Azure Container Registry
 created by the Terraform pipeline above.  This will give the new pipeline access
 to Push new images to the ACR.
 
-Select "Create service connection" -> "Docker Registry".  Select __Azure
-Container Registry__  option and enter the Subscription information, ACR name
-and your Azure AD credentials when prompted.  Make sure to name the service
-connection __acr__ so that the build pipeline doesn't fail. 
+Select "Create service connection" -> "Docker Registry" then select the
+__Others__ option (__NOTE: Don't select Azure Container Registry__) and enter 
+the Subscription information used in the earlier service connection and name the
+connection __acr__.
+
 
