@@ -1,4 +1,4 @@
-terraform {
+erraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
@@ -445,7 +445,7 @@ resource "azurerm_private_endpoint" "privateendpoint-redis" {
   private_service_connection {
     name = "privateendpointconnection-redis"
     private_connection_resource_id = azurerm_redis_cache.redis.id
-    subresource_names = ["redis"]
+    subresource_names = ["redisCache"]
     is_manual_connection = false
   }
 }
