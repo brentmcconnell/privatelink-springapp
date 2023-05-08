@@ -4,7 +4,7 @@
 
 Start by forking this Github repository to the Git repo product of your choice
 (ie. GitHub or Azure DevOps)(https://github.com/brentmcconnell/privatelinkapp).  This README 
-only applies to the "main" branch.
+only applies to the "__main__" branch.
 
 ## Setup Terraform State File in Azure
 
