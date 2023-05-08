@@ -161,4 +161,14 @@ __Others__ option (__NOTE: Don't select Azure Container Registry__) and enter
 the Subscription information used in the earlier service connection and name the
 connection __acr__.
 
+### Setup Deploy Script based off of ACR updates
+  
+In this section we'll setup an ADO pipeline that uses an update to an image in an ACR registry 
+to kick off a new deployment to an App Service slot.
+  
+Select Pipelines from the left navigation menu and then select "New
+Pipeline".  Choose the __privatelink-springapp__ repository from your repository list where you forked
+it. 
 
+At the __Configuration Your Pipeline__ page, select __Existing Azure Pipeline
+YAML file__ and then select __/container-devslot-deploy.yml__ for the Path.
