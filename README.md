@@ -181,4 +181,10 @@ It's also important to note that for this particular pipeline you'll need to als
 at the top of the pipeline and change the __resource_group__ and __registry__.  Variables cannot be used in this 
 section of a pipeline.  Do no change the "MyContainer" name in this section as it is used throughout the pipeline.
   
+## Conclusion
 
+At this point you should be able to login to the Windows 11 VM in the resource_group and browse to the webapp URL
+and see a TODO application.  
+  
+You can also try pushing changes to the todo application source in the src directory and see the pipelines update the devslot 
+of the web application.
