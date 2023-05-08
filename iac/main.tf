@@ -327,6 +327,11 @@ resource "azurerm_subnet" "integrationsubnet" {
   }
 }
 
+resource "azurerm_app_service_virtual_network_swift_connection" "vnetintegrationconnection" {
+  app_service_id  = azurerm_linux_web_app.backwebapp.id
+  subnet_id       = azurerm_subnet.integrationsubnet.id
+}
+
 # Create EndpointSubnet
 resource "azurerm_subnet" "endpointsubnet" {
   name                 = "endpointsubnet"
