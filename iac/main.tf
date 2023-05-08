@@ -413,16 +413,15 @@ resource "azurerm_linux_web_app_slot" "devslot" {
   identity {
     type  = "SystemAssigned"
   }
-
 }
 
 # DNS Private zone for Privatelink
-resource "azurerm_private_dns_zone" "dnsprivatezone-app" 
+resource "azurerm_private_dns_zone" "dnsprivatezone-app" {
   name                = "privatelink.azurewebsites.net"
   resource_group_name = local.resource_group 
 }
 
-resource "azurerm_private_dns_zone" "dnsprivatezone-redis" 
+resource "azurerm_private_dns_zone" "dnsprivatezone-redis" {
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = local.resource_group 
 }
