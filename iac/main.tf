@@ -380,11 +380,13 @@ resource "azurerm_linux_web_app" "backwebapp" {
     }
   }  
   # Settings needed for Java Spring app to work
-  app_settings = {
+  app_settings = { 
     "KEYVAULT_URL"                    = azurerm_key_vault.vault.vault_uri
     "KEYVAULT_TENANT_ID"              = data.azurerm_client_config.current.tenant_id
     "KEYVAULT_CLIENT_ID"              = data.azuread_service_principal.sp.application_id
     "KEYVAULT_CLIENT_KEY"             = var.sp_key 
+    "WEBSITE_DNS_SERVER"              = "163.63.129.16"
+    "WEBSITE_VNET_ROUTE_ALL"          = "1"
   }
 
   identity {
@@ -413,6 +415,8 @@ resource "azurerm_linux_web_app_slot" "devslot" {
     "KEYVAULT_TENANT_ID"              = data.azurerm_client_config.current.tenant_id
     "KEYVAULT_CLIENT_ID"              = data.azuread_service_principal.sp.application_id
     "KEYVAULT_CLIENT_KEY"             = var.sp_key
+    "WEBSITE_DNS_SERVER"              = "163.63.129.16"
+    "WEBSITE_VNET_ROUTE_ALL"          = "1"
   }
 
   identity {
