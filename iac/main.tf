@@ -214,7 +214,7 @@ resource "azurerm_mysql_flexible_server" "dbserver" {
   version                         = "5.7"
   zone                            = 1
 
-  depends_on                      = [azurerm_private_dns_zone_virtual_network_link.mysql]
+  depends_on                      = [azurerm_private_dns_zone_virtual_network_link.dnszonelink-mysql]
 }
 
 # NOT a best practice!! Only for this demo.  Allows NOSSL on DB
