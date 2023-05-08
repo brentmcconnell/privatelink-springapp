@@ -362,6 +362,7 @@ resource "azurerm_linux_web_app" "backwebapp" {
   site_config {
     minimum_tls_version = "1.2"
     container_registry_use_managed_identity = true
+    vnet_route_all_enabled = true
     application_stack {
       docker_image      = "${azurerm_container_registry.acr.login_server}/todoapp"
       docker_image_tag  = "latest"
@@ -403,6 +404,7 @@ resource "azurerm_linux_web_app_slot" "devslot" {
   site_config {
     minimum_tls_version = "1.2"
     container_registry_use_managed_identity = true
+    vnet_route_all_enabled = true
     application_stack {
       docker_image      = "${azurerm_container_registry.acr.login_server}/todoapp"
       docker_image_tag  = "latest"
