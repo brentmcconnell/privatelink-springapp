@@ -178,7 +178,7 @@ You'll also need to setup 2 variables for the pipeline:
 * resource_group
   
 It's also important to note that for this particular pipeline you'll need to also change the "resources" section
-at the top of the pipeline and change the __resource_group__ and __registry name__.  Variables cannot be used in this 
+at the top of the pipeline and change the __resource_group__ and __registry__.  Variables cannot be used in this 
 section of a pipeline.  Do no change the "MyContainer" name in this section as it is used throughout the pipeline.
   
 
