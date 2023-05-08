@@ -437,6 +437,11 @@ resource "azurerm_private_dns_zone" "dnsprivatezone-redis" {
   resource_group_name = local.resource_group 
 }
 
+resource "azurerm_private_dns_zone" "dnsprivatezone-mysql" {
+  name                = "privatelink.mysql.database.azure.com"
+  resource_group_name = local.resource_group 
+}
+
 # Link DNS to Vnet
 resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-app" {
   name = "dnszonelink-app"
@@ -445,11 +450,37 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-app" {
   virtual_network_id = azurerm_virtual_network.vnet.id
 }
 
+resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-mysql" {
+  name = "dnszonelink-mysql"
+  resource_group_name = local.resource_group 
+  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-mysql.name
+  virtual_network_id = azurerm_virtual_network.vnet.id
+}
+
 resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-redis" {
   name = "dnszonelink-redis"
   resource_group_name = local.resource_group 
   private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-redis.name
   virtual_network_id = azurerm_virtual_network.vnet.id
+}
+
+resource "azurerm_private_endpoint" "privateendpoint-mysql" {
+  name                = "${local.prefix}-privateendpoint-mysql"
+  location            = local.location 
+  resource_group_name = local.resource_group 
+  subnet_id           = azurerm_subnet.endpointsubnet.id
+
+  private_dns_zone_group {
+    name = "default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone-mysql.id]
+  }
+
+  private_service_connection {
+    name = "privateendpointconnection-mysql"
+    private_connection_resource_id = azurerm_mysql_flexible_server.dbserver.id
+    subresource_names = ["mysql"]
+    is_manual_connection = false
+  }
 }
 
 # Setup privateendpoint for Redis
