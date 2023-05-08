@@ -454,6 +454,11 @@ resource "azurerm_private_dns_zone" "dnsprivatezone-app" {
   resource_group_name = local.resource_group 
 }
 
+resource "azurerm_private_dns_zone" "dnsprivatezone-kv" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = local.resource_group 
+}
+
 resource "azurerm_private_dns_zone" "dnsprivatezone-redis" {
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = local.resource_group 
@@ -472,6 +477,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-mysql" {
   virtual_network_id    = azurerm_virtual_network.vnet.id
 }
 
+resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-kv" {
+  name                  = "dnszonelink-kv"
+  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-kv.name
+  resource_group_name   = local.resource_group 
+  virtual_network_id    = azurerm_virtual_network.vnet.id
+}
+
 # Link DNS to Vnet
 resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-app" {
   name = "dnszonelink-app"
@@ -485,6 +497,25 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-redis" {
   resource_group_name = local.resource_group 
   private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-redis.name
   virtual_network_id = azurerm_virtual_network.vnet.id
+}
+
+resource "azurerm_private_endpoint" "privateendpoint-kv" {
+  name                = "${local.prefix}-privateendpoint-kv"
+  location            = local.location 
+  resource_group_name = local.resource_group 
+  subnet_id           = azurerm_subnet.endpointsubnet.id
+
+  private_dns_zone_group {
+    name = "default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone-kv.id]
+  }
+
+  private_service_connection {
+    name = "privateendpointconnection-kv"
+    private_connection_resource_id = azurerm_key_vault.vault.id
+    subresource_names = ["redisCache"]
+    is_manual_connection = false
+  }
 }
 
 # Setup privateendpoint for Redis
