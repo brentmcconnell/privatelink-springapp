@@ -161,4 +161,30 @@ __Others__ option (__NOTE: Don't select Azure Container Registry__) and enter
 the Subscription information used in the earlier service connection and name the
 connection __acr__.
 
+### Setup Deploy Script based off of ACR updates
+  
+In this section we'll setup an ADO pipeline that uses an update to an image in an ACR registry 
+to kick off a new deployment to an App Service slot.
+  
+Select Pipelines from the left navigation menu and then select "New
+Pipeline".  Choose the __privatelink-springapp__ repository from your repository list where you forked
+it. 
 
+At the __Configuration Your Pipeline__ page, select __Existing Azure Pipeline
+YAML file__ and then select __/container-devslot-deploy.yml__ for the Path.  
+  
+You'll also need to setup 2 variables for the pipeline:
+* prefix
+* resource_group
+  
+It's also important to note that for this particular pipeline you'll need to also change the "resources" section
+at the top of the pipeline and change the __resource_group__ and __registry__.  Variables cannot be used in this 
+section of a pipeline.  Do no change the "MyContainer" name in this section as it is used throughout the pipeline.
+  
+## Conclusion
+
+At this point you should be able to login to the Windows 11 VM in the resource_group and browse to the webapp URL
+and see a TODO application.  
+  
+You can also try pushing changes to the todo application source in the src directory and see the pipelines update the devslot 
+of the web application.
