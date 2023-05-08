@@ -207,6 +207,9 @@ resource "azurerm_mysql_flexible_server" "dbserver" {
   administrator_login             = "mysqladmin"
   administrator_password          = random_password.password.result
 
+  delegated_subnet_id             = azurerm_subnet.mysqlsubnet.id
+  private_dns_zone_id             = azurerm_private_dns_zone.privatednszone-mysql.id
+
   sku_name                        = "B_Standard_B1s"
   version                         = "5.7"
   zone                            = 1
@@ -221,13 +224,13 @@ resource "azurerm_mysql_flexible_server_configuration" "nossl" {
 }
 
 # Allow services in Azure to hit database
-resource "azurerm_mysql_flexible_server_firewall_rule" "allazure" {
-  name                = "azure"
-  resource_group_name = local.resource_group 
-  server_name         = azurerm_mysql_flexible_server.dbserver.name
-  start_ip_address    = "0.0.0.0"
-  end_ip_address      = "0.0.0.0"
-}
+# resource "azurerm_mysql_flexible_server_firewall_rule" "allazure" {
+#   name                = "azure"
+#   resource_group_name = local.resource_group 
+#   server_name         = azurerm_mysql_flexible_server.dbserver.name
+#   start_ip_address    = "0.0.0.0"
+#   end_ip_address      = "0.0.0.0"
+# }
 
 # Create a todo database for the example database
 resource "azurerm_mysql_flexible_database" "tododb" {
@@ -323,6 +326,23 @@ resource "azurerm_subnet" "integrationsubnet" {
     name = "delegation"
     service_delegation {
       name = "Microsoft.Web/serverFarms"
+    }
+  }
+}
+
+# Create MysqlSubnet
+resource "azurerm_subnet" "mysqlsubnet" {
+  name                 = "mysqlsubnet"
+  resource_group_name  = local.resource_group 
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.3.0/24"]
+  delegation {
+    name = "delegation"
+    service_delegation {
+      name = "Microsoft.DBforMySQL/flexibleServers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
     }
   }
 }
@@ -438,8 +458,16 @@ resource "azurerm_private_dns_zone" "dnsprivatezone-redis" {
 }
 
 resource "azurerm_private_dns_zone" "dnsprivatezone-mysql" {
-  name                = "privatelink.mysql.database.azure.com"
+  name                = "private.mysql.database.azure.com"
   resource_group_name = local.resource_group 
+}
+
+# Enables you to manage Private DNS zone Virtual Network Links
+resource "azurerm_private_dns_zone_virtual_network_link" "mysql" {
+  name                  = "mysqlfsVnetZonedb.com"
+  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-mysql.name
+  resource_group_name   = local.resource_group 
+  virtual_network_id    = azurerm_virtual_network.vnet.id
 }
 
 # Link DNS to Vnet
@@ -450,37 +478,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-app" {
   virtual_network_id = azurerm_virtual_network.vnet.id
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-mysql" {
-  name = "dnszonelink-mysql"
-  resource_group_name = local.resource_group 
-  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-mysql.name
-  virtual_network_id = azurerm_virtual_network.vnet.id
-}
-
 resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-redis" {
   name = "dnszonelink-redis"
   resource_group_name = local.resource_group 
   private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-redis.name
   virtual_network_id = azurerm_virtual_network.vnet.id
-}
-
-resource "azurerm_private_endpoint" "privateendpoint-mysql" {
-  name                = "${local.prefix}-privateendpoint-mysql"
-  location            = local.location 
-  resource_group_name = local.resource_group 
-  subnet_id           = azurerm_subnet.endpointsubnet.id
-
-  private_dns_zone_group {
-    name = "default"
-    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone-mysql.id]
-  }
-
-  private_service_connection {
-    name = "privateendpointconnection-mysql"
-    private_connection_resource_id = azurerm_mysql_flexible_server.dbserver.id
-    subresource_names = ["mysql"]
-    is_manual_connection = false
-  }
 }
 
 # Setup privateendpoint for Redis
