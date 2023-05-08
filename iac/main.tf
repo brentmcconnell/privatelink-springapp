@@ -513,7 +513,7 @@ resource "azurerm_private_endpoint" "privateendpoint-kv" {
   private_service_connection {
     name = "privateendpointconnection-kv"
     private_connection_resource_id = azurerm_key_vault.vault.id
-    subresource_names = ["redisCache"]
+    subresource_names = ["vault"]
     is_manual_connection = false
   }
 }
