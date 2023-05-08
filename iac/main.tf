@@ -450,7 +450,7 @@ resource "azurerm_private_endpoint" "privateendpoint-redis" {
 
   private_dns_zone_group {
     name = "default"
-    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone.id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone-redis.id]
   }
 
   private_service_connection {
@@ -470,7 +470,7 @@ resource "azurerm_private_endpoint" "privateendpoint-app" {
 
   private_dns_zone_group {
     name = "default"
-    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone.id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone-app.id]
   }
 
   private_service_connection {
