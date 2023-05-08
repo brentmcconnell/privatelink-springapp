@@ -409,7 +409,6 @@ resource "azurerm_linux_web_app" "backwebapp" {
     "KEYVAULT_CLIENT_ID"              = data.azuread_service_principal.sp.application_id
     "KEYVAULT_CLIENT_KEY"             = var.sp_key 
     "WEBSITE_DNS_SERVER"              = "163.63.129.16"
-    "WEBSITE_VNET_ROUTE_ALL"          = "1"
   }
 
   identity {
@@ -440,7 +439,6 @@ resource "azurerm_linux_web_app_slot" "devslot" {
     "KEYVAULT_CLIENT_ID"              = data.azuread_service_principal.sp.application_id
     "KEYVAULT_CLIENT_KEY"             = var.sp_key
     "WEBSITE_DNS_SERVER"              = "163.63.129.16"
-    "WEBSITE_VNET_ROUTE_ALL"          = "1"
   }
 
   identity {
