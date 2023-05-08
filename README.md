@@ -171,4 +171,14 @@ Pipeline".  Choose the __privatelink-springapp__ repository from your repository
 it. 
 
 At the __Configuration Your Pipeline__ page, select __Existing Azure Pipeline
-YAML file__ and then select __/container-devslot-deploy.yml__ for the Path.
+YAML file__ and then select __/container-devslot-deploy.yml__ for the Path.  
+  
+You'll also need to setup 2 variables for the pipeline:
+* prefix
+* resource_group
+  
+It's also important to note that for this particular pipeline you'll need to also change the "resources" section
+at the top of the pipeline and change the __resource_group__ and __registry name__.  Variables cannot be used in this 
+section of a pipeline.  Do no change the "MyContainer" name in this section as it is used throughout the pipeline.
+  
+
