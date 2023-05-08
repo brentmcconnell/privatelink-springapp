@@ -417,16 +417,28 @@ resource "azurerm_linux_web_app_slot" "devslot" {
 }
 
 # DNS Private zone for Privatelink
-resource "azurerm_private_dns_zone" "dnsprivatezone" {
+resource "azurerm_private_dns_zone" "dnsprivatezone-app" 
   name                = "privatelink.azurewebsites.net"
   resource_group_name = local.resource_group 
 }
 
-# Link DNS to Vnet
-resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink" {
-  name = "dnszonelink"
+resource "azurerm_private_dns_zone" "dnsprivatezone-redis" 
+  name                = "privatelink.redis.cache.windows.net"
   resource_group_name = local.resource_group 
-  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone.name
+}
+
+# Link DNS to Vnet
+resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-app" {
+  name = "dnszonelink-app"
+  resource_group_name = local.resource_group 
+  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-app.name
+  virtual_network_id = azurerm_virtual_network.vnet.id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-redis" {
+  name = "dnszonelink-redis"
+  resource_group_name = local.resource_group 
+  private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-redis.name
   virtual_network_id = azurerm_virtual_network.vnet.id
 }
 
@@ -438,7 +450,7 @@ resource "azurerm_private_endpoint" "privateendpoint-redis" {
   subnet_id           = azurerm_subnet.endpointsubnet.id
 
   private_dns_zone_group {
-    name = "privatednszonegroup"
+    name = "default"
     private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone.id]
   }
 
@@ -458,7 +470,7 @@ resource "azurerm_private_endpoint" "privateendpoint-app" {
   subnet_id           = azurerm_subnet.endpointsubnet.id
 
   private_dns_zone_group {
-    name = "privatednszonegroup"
+    name = "default"
     private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone.id]
   }
 
