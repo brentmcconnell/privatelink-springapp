@@ -213,6 +213,8 @@ resource "azurerm_mysql_flexible_server" "dbserver" {
   sku_name                        = "B_Standard_B1s"
   version                         = "5.7"
   zone                            = 1
+
+  depends_on                      = [azurerm_private_dns_zone_virtual_network_link.mysql]
 }
 
 # NOT a best practice!! Only for this demo.  Allows NOSSL on DB
@@ -463,8 +465,8 @@ resource "azurerm_private_dns_zone" "dnsprivatezone-mysql" {
 }
 
 # Enables you to manage Private DNS zone Virtual Network Links
-resource "azurerm_private_dns_zone_virtual_network_link" "mysql" {
-  name                  = "mysqlfsVnetZonedb.com"
+resource "azurerm_private_dns_zone_virtual_network_link" "dnszonelink-mysql" {
+  name                  = "dnszonelink-mysql"
   private_dns_zone_name = azurerm_private_dns_zone.dnsprivatezone-mysql.name
   resource_group_name   = local.resource_group 
   virtual_network_id    = azurerm_virtual_network.vnet.id
